@@ -9,7 +9,7 @@ interface YamlPluginOptions {
   transform?: (
     data: string | number | object,
     filePath: string
-  ) => Object | undefined;
+  ) => object | undefined;
 }
 
 export const yamlPlugin = (options: YamlPluginOptions): Plugin => ({
