@@ -9,6 +9,9 @@
   "author": "Marton Lederer <marton@lederer.hu>",
   "license": "MIT",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "NODE_ENV=production node build.js && tsc --emitDeclarationOnly",
     "dev": "NODE_ENV=development node build.js",
