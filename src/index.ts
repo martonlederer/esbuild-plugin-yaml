@@ -12,23 +12,27 @@ interface YamlPluginOptions {
   ) => object | undefined;
 }
 
+const DETECTOR_R = /\.ya?ml$/;
+
 export const yamlPlugin = (options: YamlPluginOptions): Plugin => ({
   name: "yaml",
   setup(build) {
     // resolve .yaml and .yml files
-    build.onResolve({ filter: /\.(yml|yaml)$/ }, (args) => {
+    build.onResolve({ filter: DETECTOR_R }, (args) => {
       if (args.resolveDir === "") return;
 
+      const filePath = path.isAbsolute(args.path)
+        ? args.path
+        : path.join(args.resolveDir, args.path);
+
       return {
-        path: path.isAbsolute(args.path)
-          ? args.path
-          : path.join(args.resolveDir, args.path),
-        namespace: "yaml"
+        namespace: "file",
+        path: filePath
       };
     });
 
     // load files with "yaml" namespace
-    build.onLoad({ filter: /.*/, namespace: "yaml" }, async (args) => {
+    build.onLoad({ filter: DETECTOR_R, namespace: "file" }, async (args) => {
       const yamlContent = await fs.readFile(args.path);
       let parsed = yaml.load(
         new TextDecoder().decode(yamlContent),
